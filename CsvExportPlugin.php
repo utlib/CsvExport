@@ -18,10 +18,14 @@ class CsvExportPlugin extends Omeka_plugin_AbstractPlugin
         return $contexts;
     }
     
-    // Add as an export on browse and show
+    // Add as an export on items browse/show and collections show
     public function filterActionContexts($contexts, $args) {
-        $contexts['browse'][] = 'csv';
-        $contexts['show'][] = 'csv';
+        if ($args['controller'] instanceof ItemsController) {
+            $contexts['browse'][] = 'csv';
+            $contexts['show'][] = 'csv';
+        } elseif ($args['controller'] instanceof CollectionsController) {
+            $contexts['show'][] = 'csv';
+        }
         return $contexts;
     }
 }
