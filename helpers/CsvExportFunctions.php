@@ -53,7 +53,7 @@ function getCsvRow($item, $elements) {
     // Item type
     $row[] = ($item->item_type_id === null) ? '' : csvEscape(($item->getItemType()->name));
     // Collection
-    $row[] = ($item->collection_id === null) ? '' : csvEscape(metadata($item->getCollection(), array('Dublin Core', 'Title')));
+    $row[] = ($item->collection_id === null) ? '' : csvEscape(metadata($item->getCollection(), array('Dublin Core', 'Title'), array('no_escape' => true, 'no_filter' => true)));
     // Public?
     $row[] = $item->public ? '1' : '0';
     // Featured?
