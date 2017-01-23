@@ -1,5 +1,5 @@
 <?php
-class CsvExportPlugin extends Omeka_plugin_AbstractPlugin
+class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
 {
     protected $_filters = array(
         'response_contexts',
