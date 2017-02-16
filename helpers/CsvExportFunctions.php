@@ -1,16 +1,38 @@
 <?php
 
+/**
+ * Escapes a string for inclusion as a CSV entry.
+ * <p>
+ * Characters escaped include:
+ * <ul>
+ * <li>Comma</li>
+ * <li>Double Quote</li>
+ * <li>Newline</li>
+ * </ul>
+ * Strings containing these will be surrounded in double quotes. The double quote character is escaped to "" (two double quotes).
+ * </p>
+ * @param string $str
+ * @return string
+ */
 function csvEscape($str) {
+    // No need to escape
     if (strpbrk($str, "\n,\"") === FALSE) {
         return $str;
+    // Need to escape --- repeat the double quotes and surround in double quotes
     } else {
         return '"' . str_replace('"', '""', $str) . '"';
     } 
 }
 
+/**
+ * Return a sorted list of Elements, grouped by the ElementSet they belong in.
+ * @return Element[]
+ */
 function getOrderedElements() {
     $elements = array();
+    // Get the Element Sets in order to group by
     $elementSets = get_db()->getTable('ElementSet')->findAll();
+    // Get the Elements in sets
     foreach ($elementSets as $elementSet) {
         $select = get_db()->getTable('Element')->getSelect()
                 ->where('element_set_id = ?', array($elementSet->id))
@@ -22,6 +44,24 @@ function getOrderedElements() {
     return $elements;
 }
 
+/**
+ * Get an array of CSV-escaped metadata and other properties for an item, given the elements in order.
+ * <p>
+ * The entries are in the following order:
+ * <ul>
+ * <li>All metadata</li>
+ * <li>Tags (comma separated)</li>
+ * <li>Files (comma separated)</li>
+ * <li>Item type</li>
+ * <li>Collectin name</li>
+ * <li>Public (0=private, 1=public)</li>
+ * <li>Featured (0=not featured, 1=featured)</li>
+ * </ul>
+ * </p>
+ * @param Item $item
+ * @param Element[] $elements
+ * @return string[]
+ */
 function getCsvRow($item, $elements) {
     $row = array();
     // Element texts
@@ -67,15 +107,21 @@ function getCsvRow($item, $elements) {
     return $row;
 }
 
+/**
+ * Echo the header, followed by the given Items in CSV row form.
+ * @param Item[] $items
+ */
 function printCsvExport($items) {
     // Get all elements as columns
     $elements = getOrderedElements();
 
-    // Header
+    // Header: Metadata
+    // Metadata that belong to an element set are labelled "<Element Set Name>:<Element Name>"
     foreach($elements as $element) {
         echo csvEscape(($element->element_set_id === null) ? $element->name : "{$element->getElementSet()->name}:{$element->name}");
         echo ',';
     }
+    // Header: Property tail
     echo "tags,file,itemType,collection,public,featured\n";
 
     // Body
