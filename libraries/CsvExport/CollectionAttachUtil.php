@@ -9,9 +9,9 @@ class CsvExport_CollectionAttachUtil {
         // Set up holder for subitems
         $subItems = array();
         // If this is a Collection-type collection
-        if (IiifItems_CollectionUtil::isCollection($collection)) {
+        if (CsvExport_IiifItemsUtil::isCollection($collection)) {
             // For each sub-collection
-            foreach (IiifItems_CollectionUtil::findSubmembersFor($collection) as $subCollection) {
+            foreach (CsvExport_IiifItemsUtil::findSubmembersFor($collection) as $subCollection) {
                 // Recurse and join to subitem list
                 foreach (CsvExport_CollectionAttachUtil::getSubitems($subCollection) as $subItem) {
                     $subItems[] = $subItem;

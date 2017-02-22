@@ -11,7 +11,7 @@ class CsvExport_ItemAttachUtil {
         // If this not an annotation-type Item
         if ($item->item_type_id != get_option('iiifitems_annotation_item_type')) {
             // Append all items with "on canvas" equal to this item's UUID
-            foreach (IiifItems_AnnotationUtil::findAnnotationItemsUnder($item) as $subItem) {
+            foreach (CsvExport_IiifItemsUtil::findAnnotationItemsUnder($item) as $subItem) {
                 $subItems[] = $subItem;
             }
         // End: If this not an annotation-type Item
