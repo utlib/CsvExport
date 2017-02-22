@@ -34,7 +34,12 @@ function getOrderedElements() {
     $elementSets = get_db()->getTable('ElementSet')->findAll();
     // Get the Elements in sets
     foreach ($elementSets as $elementSet) {
-        $elements += $elementSet->getElements();
+        $select = get_db()->getTable('Element')->getSelect()
+                ->where('element_set_id = ?', array($elementSet->id))
+                ->order('order ASC');
+        foreach (get_db()->getTable('Element')->fetchObjects($select) as $element) {
+            $elements[] = $element;
+        }
     }
     return $elements;
 }
