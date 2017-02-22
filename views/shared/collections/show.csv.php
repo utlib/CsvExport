@@ -1,2 +1,3 @@
 <?php
-printCsvExport(get_db()->getTable('Item')->findBy(array('collection' => $collection->id)));
+// Recursively find all items and print CSV of them
+printCsvExport(CsvExport_CollectionAttachUtil::getSubitems($collection));
