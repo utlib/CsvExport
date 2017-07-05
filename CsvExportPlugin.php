@@ -15,7 +15,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
         $contexts['csv'] = array(
             'suffix' => 'csv',
             'headers' => array(
-                'Content-Type' => 'text/csv',
+                'Content-Type' => 'text/csv; charset=utf-8',
                 'Content-Disposition' => 'attachment; filename=export.csv'
             ),
         );
