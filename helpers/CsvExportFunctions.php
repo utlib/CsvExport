@@ -29,19 +29,9 @@ function csvEscape($str) {
  * @return Element[]
  */
 function getOrderedElements() {
-    $elements = array();
-    // Get the Element Sets in order to group by
-    $elementSets = get_db()->getTable('ElementSet')->findAll();
-    // Get the Elements in sets
-    foreach ($elementSets as $elementSet) {
-        $select = get_db()->getTable('Element')->getSelect()
-                ->where('element_set_id = ?', array($elementSet->id))
-                ->order('order ASC');
-        foreach (get_db()->getTable('Element')->fetchObjects($select) as $element) {
-            $elements[] = $element;
-        }
-    }
-    return $elements;
+    $table = get_db()->getTable('Element');
+    $select = $table->getSelect()->order('element_set_id ASC')->order('order ASC');
+    return $table->fetchObjects($select);
 }
 
 /**
