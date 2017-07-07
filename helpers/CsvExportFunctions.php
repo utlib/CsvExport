@@ -104,6 +104,9 @@ function getCsvRow($item, $elements) {
 function printCsvExport($items) {
     // Get all elements as columns
     $elements = getOrderedElements();
+    
+    // Fix for UTF-8: Byte-order mark
+    echo "\xEF\xBB\xBF";
 
     // Header: Metadata
     // Metadata that belong to an element set are labelled "<Element Set Name>:<Element Name>"
