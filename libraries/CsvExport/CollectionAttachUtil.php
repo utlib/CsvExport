@@ -12,9 +12,7 @@ class CsvExport_CollectionAttachUtil {
         $items = get_db()->getTable('Item')->findBy(array('collection' => $collection->id));
         foreach ($items as $item) {
             // Recurse and join to subitem list
-            foreach(CsvExport_ItemAttachUtil::getThisAndAnnotations($item) as $subItem) {
-                $subItems[] = $subItem;
-            }
+            $subItems = array_merge($subItems, CsvExport_ItemAttachUtil::getThisAndAnnotations($item));
         // End: For each sub-item under the collection
         }
         // Return all subitems

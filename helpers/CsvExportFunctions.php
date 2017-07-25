@@ -1,51 +1,17 @@
 <?php
 
 /**
- * Escapes a string for inclusion as a CSV entry.
- * <p>
- * Characters escaped include:
- * <ul>
- * <li>Comma</li>
- * <li>Double Quote</li>
- * <li>Newline</li>
- * </ul>
- * Strings containing these will be surrounded in double quotes. The double quote character is escaped to "" (two double quotes).
- * </p>
- * @param string $str
- * @return string
- */
-function csvEscape($str) {
-    // No need to escape
-    if (strpbrk($str, "\n,\"") === FALSE) {
-        return $str;
-    // Need to escape --- repeat the double quotes and surround in double quotes
-    } else {
-        return '"' . str_replace('"', '""', $str) . '"';
-    } 
-}
-
-/**
  * Return a sorted list of Elements, grouped by the ElementSet they belong in.
  * @return Element[]
  */
 function getOrderedElements() {
-    $elements = array();
-    // Get the Element Sets in order to group by
-    $elementSets = get_db()->getTable('ElementSet')->findAll();
-    // Get the Elements in sets
-    foreach ($elementSets as $elementSet) {
-        $select = get_db()->getTable('Element')->getSelect()
-                ->where('element_set_id = ?', array($elementSet->id))
-                ->order('order ASC');
-        foreach (get_db()->getTable('Element')->fetchObjects($select) as $element) {
-            $elements[] = $element;
-        }
-    }
-    return $elements;
+    $table = get_db()->getTable('Element');
+    $select = $table->getSelect()->order('element_set_id ASC')->order('order ASC');
+    return $table->fetchObjects($select);
 }
 
 /**
- * Get an array of CSV-escaped metadata and other properties for an item, given the elements in order.
+ * Get an array of metadata and other properties for an item, given the elements in order.
  * <p>
  * The entries are in the following order:
  * <ul>
@@ -70,7 +36,7 @@ function getCsvRow($item, $elements) {
         $hasEmptyElementText = true;
         foreach ($elementTexts as $elementText) {
             if ($elementText->element_id === $element->id) {
-                $row[] = csvEscape($elementText->text);
+                $row[] = $elementText->text;
                 $hasEmptyElementText = false;
                 break;
             }
@@ -86,7 +52,7 @@ function getCsvRow($item, $elements) {
     foreach ($tags as $tag) {
         $tagNames[] = $tag->name;
     }
-    $row[] = csvEscape(join($tagNames, ','));
+    $row[] = join($tagNames, ',');
     // Files
     $files = $item->getFiles();
     $fileUrls = array();
@@ -94,11 +60,11 @@ function getCsvRow($item, $elements) {
         // Use original file name if it is a URL, otherwise use the web path
         $fileUrls[] = (preg_match('/^http[s]?:/', $file->original_filename)) ? $file->original_filename : $file->getWebPath();
     }
-    $row[] = csvEscape(join($fileUrls, ','));
+    $row[] = join($fileUrls, ',');
     // Item type
-    $row[] = ($item->item_type_id === null) ? '' : csvEscape(($item->getItemType()->name));
+    $row[] = ($item->item_type_id === null) ? '' : ($item->getItemType()->name);
     // Collection
-    $row[] = ($item->collection_id === null) ? '' : csvEscape(metadata($item->getCollection(), array('Dublin Core', 'Title'), array('no_escape' => true, 'no_filter' => true)));
+    $row[] = ($item->collection_id === null) ? '' : metadata($item->getCollection(), array('Dublin Core', 'Title'), array('no_escape' => true, 'no_filter' => true));
     // Public?
     $row[] = $item->public ? '1' : '0';
     // Featured?
@@ -115,21 +81,25 @@ function printCsvExport($items) {
     // Get all elements as columns
     $elements = getOrderedElements();
     
+    // Start writing
+    $f = fopen('php://output', 'w');
+    
     // Fix for UTF-8: Byte-order mark
-    echo "\xEF\xBB\xBF";
+    fwrite($f, "\xEF\xBB\xBF");
 
     // Header: Metadata
     // Metadata that belong to an element set are labelled "<Element Set Name>:<Element Name>"
+    $headerEntries = array();
     foreach($elements as $element) {
-        echo csvEscape(($element->element_set_id === null) ? $element->name : "{$element->getElementSet()->name}:{$element->name}");
-        echo ',';
+        $headerEntries[] = ($element->element_set_id === null) ? $element->name : "{$element->getElementSet()->name}:{$element->name}";
     }
     // Header: Property tail
-    echo "tags,file,itemType,collection,public,featured\n";
+    $headerEntries = array_merge($headerEntries, array('tags', 'file', 'itemType', 'collection', 'public', 'featured'));
+    // Header: Write it in
+    fputcsv($f, $headerEntries);
 
     // Body
     foreach ($items as $item) {
-        echo join(getCsvRow($item, $elements), ',');
-        echo "\n";
+        fputcsv($f, getCsvRow($item, $elements));
     }
 }

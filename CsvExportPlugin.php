@@ -7,7 +7,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
     );
     
     /**
-     * HOOK respond_contexts: Adds the response MIME types for the CSV export format
+     * FILTER respond_contexts: Adds the response MIME types for the CSV export format
      * @param array $contexts
      * @return array
      */
@@ -23,7 +23,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
     }
     
     /**
-     * HOOK action_contexts: Add CSV as an export on Items browse/show and Collections show actions
+     * FILTER action_contexts: Add CSV as an export on Items browse/show and Collections show actions
      * @param array $contexts
      * @param array $args
      * @return array
