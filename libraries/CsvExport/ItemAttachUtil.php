@@ -6,17 +6,13 @@ class CsvExport_ItemAttachUtil {
      * @return Item[]
      */
     public static function getThisAndAnnotations($item) {
-        // Set up holder for subitems (include the starting item)
-        $subItems = array($item);
         // If this not an annotation-type Item
         if ($item->item_type_id != get_option('iiifitems_annotation_item_type')) {
-            // Append all items with "on canvas" equal to this item's UUID
-            foreach (CsvExport_IiifItemsUtil::findAnnotationItemsUnder($item) as $subItem) {
-                $subItems[] = $subItem;
-            }
+            // Return it and all attached annotations
+            return array_merge(array($item), CsvExport_IiifItemsUtil::findAnnotationItemsUnder($item));
         // End: If this not an annotation-type Item
         }
-        // Return all subitems
-        return $subItems;
+        // Otherwise, return all subitems
+        return array($item);
     }
 }
