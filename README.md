@@ -2,11 +2,11 @@
 
 By University of Toronto Libraries
 
-This plugin adds the CSV export format to collections and items in Omeka Classic 2.3+. Exported CSV files are compatible with the [CSV Import plugin](http://omeka.org/add-ons/plugins/csv-import/).
+This plugin adds the CSV export format to items in Omeka Classic 2.3+ and collections in Omeka Classic 2.5+. Exported CSV files are compatible with the [CSV Import plugin](http://omeka.org/add-ons/plugins/csv-import/).
 
 ## System Requirements
 
-- Omeka 2.3+ (2.5+ for collections due to a bug with Omeka)
+- Omeka Classic 2.5+ (only items support the export format in Omeka Classic 2.3 and 2.4)
 - PHP 5+
 - MySQL 5.5+
 
