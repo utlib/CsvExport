@@ -56,9 +56,16 @@ function getCsvRow($item, $elements) {
     // Files
     $files = $item->getFiles();
     $fileUrls = array();
+    $useCanonical = get_option('csv_export_canonical_file_urls');
     foreach ($files as $file) {
-        // Use original file name if it is a URL, otherwise use the web path
-        $fileUrls[] = (preg_match('/^http[s]?:/', $file->original_filename)) ? $file->original_filename : $file->getWebPath();
+        // Canonical: Use original file name if it is a URL, otherwise use the local web path
+        if ($useCanonical) {
+            $fileUrls[] = (preg_match('/^http[s]?:/', $file->original_filename)) ? $file->original_filename : $file->getWebPath();
+        }
+        // Not canonical: Always use the local web path
+        else {
+            $fileUrls[] = $file->getWebPath();
+        }
     }
     $row[] = join($fileUrls, ',');
     // Item type
