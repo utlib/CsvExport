@@ -89,12 +89,12 @@ function printCsvExport($items) {
 
     // Header: Metadata
     // Metadata that belong to an element set are labelled "<Element Set Name>:<Element Name>"
-    $headerEntries = array();
+    $baseHeaderEntries = array();
     foreach($elements as $element) {
-        $headerEntries[] = ($element->element_set_id === null) ? $element->name : "{$element->getElementSet()->name}:{$element->name}";
+        $baseHeaderEntries[] = ($element->element_set_id === null) ? $element->name : "{$element->getElementSet()->name}:{$element->name}";
     }
     // Header: Property tail
-    $headerEntries = array_merge($headerEntries, array('tags', 'file', 'itemType', 'collection', 'public', 'featured'));
+    $headerEntries = array_merge($baseHeaderEntries, array('tags', 'file', 'itemType', 'collection', 'public', 'featured'));
     // Header: Write it in
     fputcsv($f, $headerEntries, ',', '"', "\0");
 
