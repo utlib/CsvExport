@@ -96,10 +96,10 @@ function printCsvExport($items) {
     // Header: Property tail
     $headerEntries = array_merge($headerEntries, array('tags', 'file', 'itemType', 'collection', 'public', 'featured'));
     // Header: Write it in
-    fputcsv($f, $headerEntries);
+    fputcsv($f, $headerEntries, ',', '"', "\0");
 
     // Body
     foreach ($items as $item) {
-        fputcsv($f, getCsvRow($item, $elements));
+        fputcsv($f, getCsvRow($item, $elements), ',', '"', "\0");
     }
 }
