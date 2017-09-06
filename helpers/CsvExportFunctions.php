@@ -103,10 +103,23 @@ function printCsvExport($items) {
     // Header: Property tail
     $headerEntries = array_merge($baseHeaderEntries, array('tags', 'file', 'itemType', 'collection', 'public', 'featured'));
     // Header: Write it in
-    fputcsv($f, $headerEntries, ',', '"', "\0");
+    _fputcsv($f, $headerEntries);
 
     // Body
     foreach ($items as $item) {
-        fputcsv($f, getCsvRow($item, $elements), ',', '"', "\0");
+        _fputcsv($f, getCsvRow($item, $elements));
+    }
+}
+
+/**
+ * Cross-compatible version of fputcsv() for working around RHEL 7.
+ * @param resource $f
+ * @param array $row
+ */
+function _fputcsv($f, $row) {
+    if (version_compare(PHP_VERSION, '5.5.4', '<')) {
+        fputcsv($f, $row, ',', '"');
+    } else {
+        fputcsv($f, $row, ',', '"', "\0");
     }
 }
