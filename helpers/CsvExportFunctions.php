@@ -109,6 +109,9 @@ function printCsvExport($items) {
     foreach ($items as $item) {
         _fputcsv($f, getCsvRow($item, $elements));
     }
+    
+    // Done writing
+    fclose($f);
 }
 
 /**
