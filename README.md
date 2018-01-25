@@ -2,6 +2,10 @@
 
 By University of Toronto Libraries
 
+![CSV export format on Collection Show view](https://raw.githubusercontent.com/utlib/CsvExport/gh-pages/_readme_images/collection_formats.png)
+
+![CSV export format on Items Browse/Search view](https://raw.githubusercontent.com/utlib/CsvExport/gh-pages/_readme_images/item_format.png)
+
 This plugin adds the CSV export format to items in Omeka Classic 2.3+ and collections in Omeka Classic 2.5+. Exported CSV files are compatible with the [CSV Import plugin](http://omeka.org/add-ons/plugins/csv-import/).
 
 ## System Requirements
