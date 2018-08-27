@@ -8,26 +8,28 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
         'config_form',
         'upgrade',
     );
-    
+
     protected $_filters = array(
         'response_contexts',
         'action_contexts',
     );
-    
+
     /**
      * HOOK install: Set initial plugin configurations.
      */
     public function hookInstall() {
         set_option('csv_export_canonical_file_urls', 0);
+        set_option('csv_export_canonical_file_urls', ',');
     }
-    
+
     /**
      * HOOK uninstall: Remove plugin configuration entries.
      */
     public function hookUninstall() {
         delete_option('csv_export_canonical_file_urls');
+        delete_option('csv_export_separator_character');
     }
-    
+
     /**
      * HOOK config: Process configuration submissions.
      * @param array $args
@@ -35,8 +37,9 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
     public function hookConfig($args) {
         $post = $args['post'];
         set_option('csv_export_canonical_file_urls', $post['canonical_file_urls']);
+        set_option('csv_export_separator_character', $post['separator_character']);
     }
-    
+
     /**
      * HOOK config_form: Render the plugin's configuration form.
      */
@@ -46,7 +49,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
         $form->removeDecorator('Zend_Form_Decorator_Form');
         echo $form;
     }
-    
+
     /**
      * HOOK upgrade: Run migrations.
      * @param array $args
@@ -80,7 +83,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
             }
         }
     }
-    
+
     /**
      * FILTER respond_contexts: Adds the response MIME types for the CSV export format
      * @param array $contexts
@@ -96,7 +99,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
         );
         return $contexts;
     }
-    
+
     /**
      * FILTER action_contexts: Add CSV as an export on Items browse/show and Collections show actions
      * @param array $contexts

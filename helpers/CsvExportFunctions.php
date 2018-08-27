@@ -87,10 +87,10 @@ function getCsvRow($item, $elements) {
 function printCsvExport($items) {
     // Get all elements as columns
     $elements = getOrderedElements();
-    
+
     // Start writing
     $f = fopen('php://output', 'w');
-    
+
     // Fix for UTF-8: Byte-order mark
     fwrite($f, "\xEF\xBB\xBF");
 
@@ -109,7 +109,7 @@ function printCsvExport($items) {
     foreach ($items as $item) {
         _fputcsv($f, getCsvRow($item, $elements));
     }
-    
+
     // Done writing
     fclose($f);
 }
@@ -120,9 +120,10 @@ function printCsvExport($items) {
  * @param array $row
  */
 function _fputcsv($f, $row) {
+    $separatorCharacter = get_option('csv_export_separator_character');
     if (version_compare(PHP_VERSION, '5.5.4', '<')) {
-        fputcsv($f, $row, ',', '"');
+        fputcsv($f, $row, $separatorCharacter, '"');
     } else {
-        fputcsv($f, $row, ',', '"', "\0");
+        fputcsv($f, $row, $separatorCharacter, '"', "\0");
     }
 }

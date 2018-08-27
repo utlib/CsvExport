@@ -20,5 +20,10 @@ class CsvExport_Form_Config extends Omeka_Form {
             'description' => __('Whether to cite canonical file URLs (checked) or local Omeka original URLs (unchecked) for items in exported CSV files.'),
             'value' => get_option('csv_export_canonical_file_urls'),
         ));
+        $this->addElement('text', 'separator_character', array(
+            'label' => __('Set csv separator character'),
+            'description' => __('Set the character that will be used to separate fields in csv export'),
+            'value' => get_option('csv_export_separator_character'),
+        ));
     }
 }
