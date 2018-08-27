@@ -19,7 +19,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
      */
     public function hookInstall() {
         set_option('csv_export_canonical_file_urls', 0);
-        set_option('csv_export_canonical_file_urls', ',');
+        set_option('csv_export_separator_character', ',');
     }
 
     /**
