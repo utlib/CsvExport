@@ -52,7 +52,7 @@ function getCsvRow($item, $elements) {
     foreach ($tags as $tag) {
         $tagNames[] = $tag->name;
     }
-    $row[] = join($tagNames, ',');
+    $row[] = join(',', $tagNames);
     // Files
     $files = $item->getFiles();
     $fileUrls = array();
@@ -67,7 +67,7 @@ function getCsvRow($item, $elements) {
             $fileUrls[] = $file->getWebPath();
         }
     }
-    $row[] = join($fileUrls, ',');
+    $row[] = join(',', $fileUrls);
     // Item type
     $row[] = ($item->item_type_id === null) ? '' : ($item->getItemType()->name);
     // Collection
@@ -87,10 +87,10 @@ function getCsvRow($item, $elements) {
 function printCsvExport($items) {
     // Get all elements as columns
     $elements = getOrderedElements();
-    
+
     // Start writing
     $f = fopen('php://output', 'w');
-    
+
     // Fix for UTF-8: Byte-order mark
     fwrite($f, "\xEF\xBB\xBF");
 
@@ -109,7 +109,7 @@ function printCsvExport($items) {
     foreach ($items as $item) {
         _fputcsv($f, getCsvRow($item, $elements));
     }
-    
+
     // Done writing
     fclose($f);
 }
