@@ -30,6 +30,10 @@ function getOrderedElements() {
  */
 function getCsvRow($item, $elements) {
     $row = array();
+    // Id
+    $row[] = $item->id;
+    // Default URI
+    $row[] = WEB_ROOT.'/items/show/'.$item->id;
     // Element texts
     $elementTexts = get_db()->getTable('ElementText')->findByRecord($item);
     foreach ($elements as $element) {
@@ -97,6 +101,7 @@ function printCsvExport($items) {
     // Header: Metadata
     // Metadata that belong to an element set are labelled "<Element Set Name>:<Element Name>"
     $baseHeaderEntries = array();
+    $baseHeaderEntries = array('Item Id','Item URI');
     foreach($elements as $element) {
         $baseHeaderEntries[] = ($element->element_set_id === null) ? $element->name : "{$element->getElementSet()->name}:{$element->name}";
     }
