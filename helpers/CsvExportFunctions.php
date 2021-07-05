@@ -121,9 +121,10 @@ function printCsvExport($items) {
  * @param array $row
  */
 function _fputcsv($f, $row) {
+    $separatorCharacter = get_option('csv_export_separator_character');
     if (version_compare(PHP_VERSION, '5.5.4', '<')) {
-        fputcsv($f, $row, ',', '"');
+        fputcsv($f, $row, $separatorCharacter, '"');
     } else {
-        fputcsv($f, $row, ',', '"', "\0");
+        fputcsv($f, $row, $separatorCharacter, '"', "\0");
     }
 }
