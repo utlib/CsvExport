@@ -36,6 +36,7 @@ function getCsvRow($item, $elements) {
     $row[] = WEB_ROOT.'/items/show/'.$item->id;
     // Element texts
     $elementTexts = get_db()->getTable('ElementText')->findByRecord($item);
+    $internalSeparatorCharacter = get_option('csv_export_separator_character_internal');
     foreach ($elements as $element) {
         $accumulatedTexts = array();
         foreach ($elementTexts as $elementText) {
@@ -43,7 +44,7 @@ function getCsvRow($item, $elements) {
                 $accumulatedTexts[] = $elementText->text;
             }
         }
-        $row[] = join('^^', $accumulatedTexts);
+        $row[] = join($internalSeparatorCharacter, $accumulatedTexts);
     }
     // Tail with tags, file, itemType, collection, public, featured
     // Tags

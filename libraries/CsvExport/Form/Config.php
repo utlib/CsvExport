@@ -21,9 +21,14 @@ class CsvExport_Form_Config extends Omeka_Form {
             'value' => get_option('csv_export_canonical_file_urls'),
         ));
         $this->addElement('text', 'separator_character', array(
-            'label' => __('Set csv separator character'),
-            'description' => __('Set the character that will be used to separate fields in csv export'),
+            'label' => __('CSV separator character'),
+            'description' => __('Set the character that will be used to separate fields in exported CSV files.'),
             'value' => get_option('csv_export_separator_character'),
+        ));
+        $this->addElement('text', 'separator_character_internal', array(
+            'label' => __('Internal CSV separator character'),
+            'description' => __('Set the character that will be used to separate elements of the same field in exported CSV files.'),
+            'value' => get_option('csv_export_separator_character_internal'),
         ));
     }
 }

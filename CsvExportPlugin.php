@@ -20,6 +20,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
     public function hookInstall() {
         set_option('csv_export_canonical_file_urls', 0);
         set_option('csv_export_separator_character', ',');
+        set_option('csv_export_separator_character_internal', '^^');
     }
 
     /**
@@ -28,6 +29,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
     public function hookUninstall() {
         delete_option('csv_export_canonical_file_urls');
         delete_option('csv_export_separator_character');
+        delete_option('csv_export_separator_character_internal');
     }
 
     /**
@@ -38,6 +40,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
         $post = $args['post'];
         set_option('csv_export_canonical_file_urls', $post['canonical_file_urls']);
         set_option('csv_export_separator_character', $post['separator_character']);
+        set_option('csv_export_separator_character_internal', $post['separator_character_internal']);
     }
 
     /**
